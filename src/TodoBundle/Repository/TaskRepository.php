@@ -87,4 +87,14 @@ class TaskRepository extends EntityRepository
             ->getResult()
             ;
     }
+
+    public function getFinishedTasks($date, $user)
+    {
+        return $this->createQueryBuilder('t')
+            ->where(':date > t.dueDate')->setParameter('date', $date)
+            ->andWhere('t.user = :user')->setParameter('user', $user)
+            ->getQuery()
+            ->getResult()
+            ;
+    }
 }

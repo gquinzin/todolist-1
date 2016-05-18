@@ -47,6 +47,22 @@ class Category
      */
     protected $tasks;
 
+    /**
+     * @return mixed
+     */
+    public function getTasks()
+    {
+        return $this->tasks;
+    }
+
+    /**
+     * @param mixed $tasks
+     */
+    public function setTasks($tasks)
+    {
+        $this->tasks = $tasks;
+    }
+
     public function __toString()
     {
         return $this->name;

@@ -7,7 +7,7 @@ task.form.remindat: Rappel le
 task.form.createdat: Créée le
 task.form.updatedat: Mise à jour le
 task.form.status: Statut
-task.form.save: Ajouter
+task.form.save: Enregistrer
 user.registration.minmessage: Le nom doit avoir 3 caractères minimum
 task.empty_list: Aucune tâche
 category.form.name: Nom

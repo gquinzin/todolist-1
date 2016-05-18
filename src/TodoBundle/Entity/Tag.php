@@ -35,6 +35,22 @@ class Tag
      */
     protected $task;
 
+    /**
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getTask()
+    {
+        return $this->task;
+    }
+
+    /**
+     * @param \Doctrine\Common\Collections\Collection $task
+     */
+    public function setTask($task)
+    {
+        $this->task = $task;
+    }
+
     public function __toString()
     {
         return $this->title;

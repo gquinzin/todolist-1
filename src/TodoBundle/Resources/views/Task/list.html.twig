@@ -6,7 +6,7 @@
         {{ knp_pagination_render(pagination) }}
     </div>
 
-    <h1>Tasks list</h1>
+    <h1>Tasks</h1>
     <table class="table table-striped table-bordered">
         <tr>
             <th>
@@ -23,6 +23,9 @@
             </th>
             <th>
                 Tags
+            </th>
+            <th>
+                Actions
             </th>
         </tr>
     {% for task in pagination %}
@@ -45,6 +48,14 @@
                 {% for tag in task.tag %}
                 <a href="{{ path('list_task_tag', {tag: tag.id}) }}"><span class="glyphicon glyphicon-tag"></span> {{ tag.title }}</a>
                 {% endfor %}
+            </td>
+            <td class="col-xs-2">
+                <a href="{{ path('edit_task', {"id": task.id}) }}"><span class="glyphicon glyphicon-edit" title="Edit"></span></a>
+                |
+                <a href="{{ path('delete_task', {"id": task.id}) }}"><span class="glyphicon glyphicon-remove" title="Delete"></span></a>
+                |
+
+                <a href="n.al3xis@gmail.com?subject={{ task.label }}&body={{ task.description }} - Echéance : {{ task.dueDate|date('d/m/Y \à H:i') }}"><span class="glyphicon glyphicon-envelope" title="Send by mail"></span></a>
             </td>
         </tr>
     {% else %}

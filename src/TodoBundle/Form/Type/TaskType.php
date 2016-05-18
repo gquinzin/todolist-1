@@ -22,9 +22,11 @@ class TaskType extends AbstractType
             ))
             ->add('dueDate', null, array(
                 'label' => 'task.form.duedate',
+                'data' => new \DateTime(date('Y-m-d H:i:s')),
             ))
             ->add('remindAt', null, array(
                 'label' => 'task.form.remindat',
+                'data' => new \DateTime(date('Y-m-d H:i:s')),
             ))
             ->add('status', null, array(
                 'label' => 'task.form.status',

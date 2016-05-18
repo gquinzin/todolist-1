@@ -3,8 +3,18 @@
 {% block body %}
     <h1>Tags list</h1>
     <table class="table table-striped table-bordered">
+        <tr>
+            <th>
+                Name
+            </th>
+        </tr>
     {% for tag in tags %}
-        <tr><td><a href="{{ path('list_task_tag', {tag: tag.id}) }}"><span class="glyphicon glyphicon-tag"></span> {{ tag.title }}</a></td></tr>
+        <tr>
+            <td>
+                <a href="{{ path('list_task_tag', {tag: tag.id}) }}"><span class="glyphicon glyphicon-tag"></span> {{ tag.title }}</a>
+                <span style="margin-left: 10px">{{ tag.task.count }} task(s)</span>
+            </td>
+        </tr>
     {% else %}
         <tr><td>{% trans %}tag.empty_list{% endtrans %}</td></tr>
     {% endfor %}

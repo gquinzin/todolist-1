@@ -42,6 +42,18 @@ class TaskController extends Controller
         ));
     }
 
+    private function getPagination($request, $tasks)
+    {
+        $paginator  = $this->get('knp_paginator');
+        $pagination = $paginator->paginate(
+            $tasks,
+            $request->query->getInt('page', 1),
+            2
+        );
+
+        return $pagination;
+    }
+
     /**
      * @Route("/task/list/{field}/{order}", requirements={
      *     "field" : "label|dueDate|createdAt",
@@ -62,15 +74,8 @@ class TaskController extends Controller
                 $order
             );
 
-        $paginator  = $this->get('knp_paginator');
-        $pagination = $paginator->paginate(
-            $tasks,
-            $request->query->getInt('page', 1),
-            5
-        );
-
         return $this->render('TodoBundle:Task:list.html.twig', array(
-            'pagination' => $pagination
+            'pagination' => $this->getPagination($request, $tasks)
         ));
     }
 
@@ -97,7 +102,7 @@ class TaskController extends Controller
             );
 
         return $this->render('TodoBundle:Task:list.html.twig', array(
-            'tasks' => $tasks,
+            'pagination' => $this->getPagination($request, $tasks)
         ));
     }
 
@@ -112,7 +117,7 @@ class TaskController extends Controller
      * }, name="list_task_tag")
      * @ParamConverter("tag", class="TodoBundle:Tag")
      */
-    public function listByTagAction(Tag $tag, $field, $order)
+    public function listByTagAction(Request $request, Tag $tag, $field, $order)
     {
         $tasks = $this
             ->getDoctrine()
@@ -125,7 +130,7 @@ class TaskController extends Controller
             );
 
         return $this->render('TodoBundle:Task:list.html.twig', array(
-            'tasks' => $tasks,
+            'pagination' => $this->getPagination($request, $tasks)
         ));
     }
 
@@ -172,5 +177,55 @@ class TaskController extends Controller
         return $this->render('TodoBundle:Task:list.html.twig', array(
             'tasks' => $tasks,
         ));
+    }
+
+    /**
+     * @Route("/task/delete/{id}", requirements={"id" = "\d+"}, name="delete_task")
+     */
+    public function deleteAction($id)
+    {
+        $em = $this->getDoctrine()->getEntityManager();
+        $task = $em->getRepository('TodoBundle:Task')
+            ->find($id);
+        $em->remove($task);
+        $em->flush();
+
+        return $this->redirectToRoute('list_task');
+    }
+
+    /**
+     * @Route("/task/edit/{id}", requirements={"id" = "\d+"}, name="edit_task")
+     */
+    public function editAction(Request $request, $id)
+    {
+        if (is_null($id)) {
+            $postData = $request->get('task');
+            $id = $postData['id'];
+        }
+
+        $em = $this->getDoctrine()->getEntityManager();
+        $task = $em->getRepository('TodoBundle:Task')
+            ->find($id);
+
+        $form = $this->createForm(TaskType::class, $task);
+
+        if ($request->getMethod() == 'POST') {
+            $form->handleRequest($request);
+
+            $em->persist($task);
+            $em->flush();
+
+            $this->addFlash(
+                'notice',
+                'Task edited with success'
+            );
+
+            return $this->redirect($this->generateUrl('list_task'));
+        }
+
+        return $this->render('TodoBundle:Task:edit.html.twig', array(
+            'form' => $form->createView()
+        ));
+
     }
 }
